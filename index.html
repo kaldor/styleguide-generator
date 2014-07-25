@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Styleguide template</title>
+    <link rel="stylesheet" href="styles/vendor/normalize.css">
+    <style>
+      .component__info {
+        background: LIGHTGOLDENRODYELLOW;
+      }
+      dt {
+        font-weight: bold;
+        float: left;
+        margin-right: 10px;
+      }
+      .is-debug [data-ui-component] {
+        outline: 5px solid yellow;
+      }
+
+      /* Would live in component css file */
+      .product {
+        overflow: auto;
+        background: grey;
+      }
+      .product__media {
+        float: left;
+      }
+      .product--flipped .product__media {
+        float: right;
+      }
+
+      .media {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="styleguide"></div>
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/mustache/mustache.js"></script>
+    <script src="scripts/styleguide.js"></script>
+    <script>
+      new StyleguideGenerator({
+        el: '.styleguide',
+        components: [{
+          name: 'product',
+          extends: 'N/A',
+          modifiers: 'N/A'
+        }, {
+          name: 'product--flipped',
+          extends: 'N/A',
+          modifiers: 'N/A'
+        },
+        {
+          name: 'button',
+          extends: 'N/A',
+          modifiers: 'N/A'
+        },
+        {
+          name: 'media',
+          extends: 'N/A',
+          modifiers: 'N/A'
+        }],
+        data: {
+          product_heading: 'Product heading',
+          product_image: 'http://placehold.it/200x200',
+          product_description: 'Praesent eget venenatis neque. Nulla a pharetra sapien. Mauris eu neque eget sem varius ultrices vel sed ipsum. Integer ullamcorper dapibus rutrum. Sed ac nunc viverra, tincidunt justo id, viverra sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+          media_src: 'http://placehold.it/400x400'
+        }
+      })
+    </script>
+  </body>
+</html>

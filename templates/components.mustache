@@ -1,0 +1,36 @@
+{{#.}}
+<section class="component">
+
+  <header>
+    <h3 class="component__name">
+      {{name}}
+    </h3>
+  </header>
+
+  <dl class="component__info">
+    <dt>Component:</dt>
+    <dd>{{name}}</dd>
+    <dt>Extends:</dt>
+    <dd>{{&extends}}</dd>
+    <dt>Modifiers:</dt>
+    <dd>{{&modifiers}}</dd>
+  </dl>
+
+  <section class="component__stage">
+
+    <h4>Example</h4>
+
+    {{{partial}}}
+
+  </section>
+
+  <textarea name=""
+    id=""
+    cols="50"
+    rows="10"
+    class="component__markup">
+{{{partial}}}
+  </textarea>
+
+</section>
+{{/.}}

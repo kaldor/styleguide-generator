@@ -1,0 +1,8 @@
+{
+  "name": "StyleguideGenerator",
+  "version": "0.0.1",
+  "dependencies": {
+    "mustache": "~0.8.2",
+    "jquery": "~2.1.1"
+  }
+}
