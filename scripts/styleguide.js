@@ -12,11 +12,26 @@
           return '{{> ' + component.name + '}}';
         };
       });
+      this.isolatedComponent = this.getLocationHash();
       this.partials = {};
       this.init();
     }
 
     StyleguideGenerator.fn = StyleguideGenerator.prototype;
+
+    StyleguideGenerator.fn.getLocationHash = function() {
+      return window.location.hash.substring( 1 );
+    };
+
+    StyleguideGenerator.fn.isolate = function() {
+      this.isolatedComponent = this.getLocationHash();
+
+      if ( this.isolatedComponent ) {
+        $( '.component[data-is-component!="' + this.isolatedComponent + '"]' ).addClass( 'is-hidden' );
+      } else {
+        $( '.component' ).removeClass( 'is-hidden' );
+      }
+    };
 
     StyleguideGenerator.fn.loadTemplate = function( name ) {
       return $.ajax({
@@ -40,6 +55,9 @@
         template = Mustache.render( template, this.components );
         var rendered = Mustache.render( template, this.data, this.partials );
         this.target.html( rendered );
+        if ( this.isolatedComponent ) {
+          this.isolate();
+        }
       }.bind( this ));
     };
 
@@ -47,7 +65,12 @@
       console.error( e.message );
     };
 
+    StyleguideGenerator.fn.bindEvents = function() {
+      $( window ).on( 'hashchange', $.proxy( this.isolate, this ) );
+    };
+
     StyleguideGenerator.fn.init = function() {
+      this.bindEvents();
       $.when.apply( $, this.loadTemplates.call( this ) )
         .then( this.render.bind( this ) )
         .fail( this.handleLoadError );
