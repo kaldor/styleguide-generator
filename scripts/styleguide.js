@@ -12,7 +12,9 @@
       console.error( e.message );
     }
 
-    var target = $( options.el ),
+    var selector = ( options && options.el ) || '.styleguide',
+
+      target = $( selector ),
 
       components = options.components,
 
