@@ -27,9 +27,9 @@
       this.isolatedComponent = this.getLocationHash();
 
       if ( this.isolatedComponent ) {
-        $( '.component[data-is-component!="' + this.isolatedComponent + '"]' ).addClass( 'is-hidden' );
+        $( '.sg-component[data-is-component!="' + this.isolatedComponent + '"]' ).addClass( 'sg-is-hidden' );
       } else {
-        $( '.component' ).removeClass( 'is-hidden' );
+        $( '.sg-component' ).removeClass( 'sg-is-hidden' );
       }
     };
 
