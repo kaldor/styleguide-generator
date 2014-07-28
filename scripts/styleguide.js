@@ -2,80 +2,95 @@
 (function( window, document, $, Mustache, undefined ) {
   'use strict';
 
-  window.StyleguideGenerator = (function() {
-    function StyleguideGenerator( options ) {
-      this.target = $( options.el );
-      this.components = options.components;
-      this.data = options.data;
-      this.components.forEach(function( component ) {
-        component.partial = function() {
-          return '{{> ' + component.name + '}}';
-        };
-      });
-      this.isolatedComponent = this.getLocationHash();
-      this.partials = {};
-      this.init();
+  window.StyleguideGenerator = function( options ) {
+
+    function getLocationHash() {
+      return window.location.hash.substring( 1 );
     }
 
-    StyleguideGenerator.fn = StyleguideGenerator.prototype;
-
-    StyleguideGenerator.fn.getLocationHash = function() {
-      return window.location.hash.substring( 1 );
-    };
-
-    StyleguideGenerator.fn.isolate = function() {
-      this.isolatedComponent = this.getLocationHash();
-
-      if ( this.isolatedComponent ) {
-        $( '.sg-component[data-is-component!="' + this.isolatedComponent + '"]' ).addClass( 'sg-is-hidden' );
-      } else {
-        $( '.sg-component' ).removeClass( 'sg-is-hidden' );
-      }
-    };
-
-    StyleguideGenerator.fn.loadTemplate = function( name ) {
-      return $.ajax({
-        url: 'templates/' + name + '.mustache'
-      }).done(function( tmpl ) {
-        this.partials[ name ] = tmpl;
-      }.bind( this ));
-    };
-
-    StyleguideGenerator.fn.loadTemplates = function() {
-      var names = this.components.map(function( component ) {
-        return component.name;
-      });
-      return names.map( this.loadTemplate.bind( this ) );
-    };
-
-    StyleguideGenerator.fn.render = function() {
-      $.when(
-        this.loadTemplate.call( this, 'components' )
-      ).then( function( template ) {
-        template = Mustache.render( template, this.components );
-        var rendered = Mustache.render( template, this.data, this.partials );
-        this.target.html( rendered );
-        if ( this.isolatedComponent ) {
-          this.isolate();
-        }
-      }.bind( this ));
-    };
-
-    StyleguideGenerator.fn.handleLoadError = function( e ) {
+    function handleError( e ) {
       console.error( e.message );
-    };
+    }
 
-    StyleguideGenerator.fn.bindEvents = function() {
-      $( window ).on( 'hashchange', $.proxy( this.isolate, this ) );
-    };
+    var target = $( options.el ),
 
-    StyleguideGenerator.fn.init = function() {
-      this.bindEvents();
-      $.when.apply( $, this.loadTemplates.call( this ) )
-        .then( this.render.bind( this ) )
-        .fail( this.handleLoadError );
-    };
+      components = options.components,
 
-    return StyleguideGenerator;
-  })();
+      data = options.data,
+
+      componentToIsolate = getLocationHash(),
+
+      partials = {},
+
+      dom = {},
+
+      IS_HIDDEN_CLASS = 'sg-is-hidden',
+
+      COMPONENT_CLASS = 'sg-component',
+
+      getComponentPartialString = function( component ) {
+        return '{{> ' + component.name + '}}';
+      },
+
+      setComponentPartialProp = function( component ) {
+        component.partial = getComponentPartialString( component );
+      },
+
+      isolateComponent = function() {
+        componentToIsolate = getLocationHash();
+        if ( componentToIsolate ) {
+          dom.components.not( '[data-is-component="' + componentToIsolate + '"]')
+            .addClass( IS_HIDDEN_CLASS );
+        } else {
+          dom.components.removeClass( IS_HIDDEN_CLASS );
+        }
+      },
+
+      loadTemplate = function( name ) {
+        return $.ajax({
+          url: 'templates/' + name + '.mustache'
+        }).done(function( tmpl ) {
+          partials[ name ] = tmpl;
+        });
+      },
+
+      loadTemplates = function() {
+        var names = components.map(function( component ) {
+          return component.name;
+        });
+        return names.map( loadTemplate );
+      },
+
+      render = function() {
+        $.when( loadTemplate( 'components' ) )
+          .then( function( template ) {
+            template = Mustache.render( template, components );
+            var rendered = Mustache.render( template, data, partials );
+            target.html( rendered );
+            cacheDOM();
+            if ( componentToIsolate ) {
+              isolateComponent();
+            }
+          });
+      },
+
+      cacheDOM = function() {
+        dom.components = $( '.' + COMPONENT_CLASS );
+      },
+
+      bindEvents = function() {
+        $( window ).on( 'hashchange', isolateComponent );
+      },
+
+      init = function() {
+        components.forEach( setComponentPartialProp );
+        bindEvents();
+        $.when.apply( $, loadTemplates() )
+          .then( render )
+          .fail( handleError );
+      };
+
+    init();
+
+  };
 })( window, document, $, Mustache );
