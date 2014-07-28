@@ -93,7 +93,6 @@
       init = function() {
         components.forEach( setComponentPartialProp );
         bindEvents();
-        initZeroClipboard();
         $.when.apply( $, loadTemplates() )
           .then( render )
           .fail( handleError );
