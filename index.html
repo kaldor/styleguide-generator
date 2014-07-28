@@ -44,33 +44,35 @@
     <script src="bower_components/mustache/mustache.js"></script>
     <script src="scripts/styleguide.js"></script>
     <script>
-      new StyleguideGenerator({
-        components: [{
-          name: 'product',
-          extends: 'N/A',
-          modifiers: 'N/A'
-        }, {
-          name: 'product--flipped',
-          extends: 'N/A',
-          modifiers: 'N/A'
-        },
-        {
-          name: 'button',
-          extends: 'N/A',
-          modifiers: 'N/A'
-        },
-        {
-          name: 'media',
-          extends: 'N/A',
-          modifiers: 'N/A'
-        }],
-        data: {
-          product_heading: 'Product heading',
-          product_image: 'http://placehold.it/200x200',
-          product_description: 'Praesent eget venenatis neque. Nulla a pharetra sapien. Mauris eu neque eget sem varius ultrices vel sed ipsum. Integer ullamcorper dapibus rutrum. Sed ac nunc viverra, tincidunt justo id, viverra sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-          media_src: 'http://placehold.it/400x400'
-        }
-      })
+      document.addEventListener( 'DOMContentLoaded', function() {
+        new StyleguideGenerator({
+          components: [{
+            name: 'product',
+            extends: 'N/A',
+            modifiers: 'N/A'
+          }, {
+            name: 'product--flipped',
+            extends: 'N/A',
+            modifiers: 'N/A'
+          },
+          {
+            name: 'button',
+            extends: 'N/A',
+            modifiers: 'N/A'
+          },
+          {
+            name: 'media',
+            extends: 'N/A',
+            modifiers: 'N/A'
+          }],
+          data: {
+            product_heading: 'Product heading',
+            product_image: 'http://placehold.it/200x200',
+            product_description: 'Praesent eget venenatis neque. Nulla a pharetra sapien. Mauris eu neque eget sem varius ultrices vel sed ipsum. Integer ullamcorper dapibus rutrum. Sed ac nunc viverra, tincidunt justo id, viverra sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            media_src: 'http://placehold.it/400x400'
+          }
+        });
+      });
     </script>
   </body>
 </html>
