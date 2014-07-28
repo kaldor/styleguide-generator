@@ -25,12 +25,16 @@
   </section>
 
   <textarea name=""
-    id=""
+    id="{{name}}"
     cols="50"
     rows="10"
     class="sg-component__markup">
 {{{partial}}}
   </textarea>
+
+  <button class="sg-component__copy-markup-button" type="button" data-clipboard-target="{{name}}">
+    Copy to clipboard
+  </button>
 
 </section>
 {{/.}}

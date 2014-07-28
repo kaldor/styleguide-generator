@@ -1,4 +1,4 @@
-/*global $, Mustache*/
+/*global $, Mustache, ZeroClipboard*/
 (function( window, document, $, Mustache, undefined ) {
   'use strict';
 
@@ -28,7 +28,7 @@
 
       IS_HIDDEN_CLASS = 'sg-is-hidden',
 
-      COMPONENT_CLASS = 'sg-component',
+      COMPONENT_NAMESPACE = 'sg-component',
 
       getComponentPartialString = function( component ) {
         return '{{> ' + component.name + '}}';
@@ -70,6 +70,7 @@
             var rendered = Mustache.render( template, data, partials );
             target.html( rendered );
             cacheDOM();
+            initZeroClipboard();
             if ( componentToIsolate ) {
               isolateComponent();
             }
@@ -77,16 +78,22 @@
       },
 
       cacheDOM = function() {
-        dom.components = $( '.' + COMPONENT_CLASS );
+        dom.components = $( '.' + COMPONENT_NAMESPACE );
+        dom.copyMarkupButtons = $( '.' + COMPONENT_NAMESPACE + '__copy-markup-button' );
       },
 
       bindEvents = function() {
         $( window ).on( 'hashchange', isolateComponent );
       },
 
+      initZeroClipboard = function() {
+        new ZeroClipboard( dom.copyMarkupButtons );
+      },
+
       init = function() {
         components.forEach( setComponentPartialProp );
         bindEvents();
+        initZeroClipboard();
         $.when.apply( $, loadTemplates() )
           .then( render )
           .fail( handleError );
